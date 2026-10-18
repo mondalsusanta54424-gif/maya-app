@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MAYA PERSONAL AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; user-select: none; }
+        body { background: #070a12; color: #ffffff; height: 100vh; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; padding-bottom: 90px; }
+        
+        .glass { background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; }
+        .glass-pill { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 25px; padding: 6px 12px; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; }
+
+        header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .top-left { font-size: 18px; color: #e2e8f0; cursor: pointer; }
+        .top-center { text-align: center; }
+        .top-center h1 { font-size: 15px; font-weight: 800; letter-spacing: 2px; color: #38bdf8; text-transform: uppercase; }
+        .top-center p { font-size: 9px; letter-spacing: 1.5px; color: #64748b; font-weight: 600; margin-top: 1px; }
+        .profile-btn { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.1); cursor: pointer; }
+
+        .main-container { padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
+        .greeting-section { display: flex; justify-content: space-between; align-items: flex-start; }
+        .greeting-text h2 { font-size: 17px; font-weight: 700; color: #f8fafc; }
+        .status-badges { display: flex; gap: 8px; margin-top: 6px; }
+        .badge-purple { color: #c084fc; border-color: rgba(192, 132, 252, 0.2); background: rgba(192, 132, 252, 0.05); }
+        
+        .fire-card { padding: 8px 12px; text-align: center; min-width: 55px; cursor: pointer; }
+        .fire-card i { color: #f97316; font-size: 14px; }
+        .fire-card .num { font-size: 13px; font-weight: 700; margin-top: 2px; }
+        .fire-card .sub { font-size: 8px; color: #64748b; }
+
+        .orb-wrapper { position: relative; width: 100%; height: 210px; display: flex; align-items: center; justify-content: center; margin: 5px 0; }
+        .orb-ring { position: absolute; width: 150px; height: 150px; border-radius: 50%; border: 2px solid rgba(56, 189, 248, 0.3); border-top-color: #38bdf8; border-bottom-color: #a855f7; animation: spin 8s linear infinite; }
+        .orb-ring-2 { position: absolute; width: 170px; height: 170px; border-radius: 50%; border: 1px dashed rgba(168, 85, 247, 0.3); animation: spin-reverse 12s linear infinite; }
+        .orb-core { width: 110px; height: 110px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #1e1b4b, #0f172a); border: 2px solid #38bdf8; box-shadow: 0 0 30px rgba(56, 189, 248, 0.4), inset 0 0 15px rgba(168, 85, 247, 0.5); display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 800; color: #38bdf8; text-shadow: 0 0 10px rgba(56, 189, 248, 0.8); cursor: pointer; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+
+        .mood-tag { position: absolute; bottom: 10px; right: 20px; font-size: 10px; color: #c084fc; }
+
+        .prompt-box { padding: 12px 16px; border-radius: 14px; }
+        .prompt-header { font-size: 9px; color: #64748b; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+        .prompt-text { font-size: 12px; color: #cbd5e1; }
+
+        .actions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .action-btn { padding: 10px 6px; text-align: center; border-radius: 12px; font-size: 11px; font-weight: 600; color: #e2e8f0; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; }
+        .action-btn i { font-size: 12px; color: #c084fc; }
+
+        .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .info-card { padding: 12px; min-height: 75px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
+        .info-card .label { font-size: 8px; font-weight: 700; letter-spacing: 1px; color: #64748b; }
+        .info-card .main-val { font-size: 15px; font-weight: 700; margin: 4px 0; color: #f8fafc; }
+        .info-card .sub-text { font-size: 9px; color: #94a3b8; }
+
+        .voice-bar { padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+        .voice-info h4 { font-size: 12px; font-weight: 700; color: #f1f5f9; }
+        .voice-info p { font-size: 10px; color: #64748b; margin-top: 2px; }
+        .mic-small-btn { width: 36px; height: 36px; border-radius: 10px; border: 1px solid #38bdf8; background: rgba(56, 189, 248, 0.1); color: #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 14px; box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); cursor: pointer; }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: rgba(7, 10, 18, 0.85); backdrop-filter: blur(20px); border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-around; align-items: center; padding: 0 10px; z-index: 90; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; color: #64748b; font-size: 10px; cursor: pointer; width: 50px; }
+        .nav-item i { font-size: 16px; }
+        .nav-item.active { color: #38bdf8; }
+
+        .main-mic-container { position: relative; top: -15px; }
+        .main-mic-btn { width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, #f97316, #ef4444); border: 2px solid #fdba74; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; box-shadow: 0 0 25px rgba(249, 115, 22, 0.6); cursor: pointer; }
+
+        /* Floating Bubble Widget for Home Screen */
+        .floating-bubble { position: fixed; top: 100px; right: 20px; width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #38bdf8, #818cf8); border: 2px solid #fff; box-shadow: 0 4px 20px rgba(56, 189, 248, 0.6); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 18px; z-index: 9999; cursor: pointer; animation: floatAnim 3s ease-in-out infinite; }
+        @keyframes floatAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+        /* Settings Overlay Page */
+        .settings-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #070a12; z-index: 10000; display: none; flex-direction: column; padding: 20px; overflow-y: auto; }
+        .settings-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .settings-header h2 { font-size: 18px; color: #38bdf8; font-weight: 700; }
+        .close-settings { font-size: 18px; color: #94a3b8; cursor: pointer; padding: 5px; }
+        
+        .setting-card { padding: 16px; margin-bottom: 15px; border-radius: 14px; }
+        .setting-card label { display: block; font-size: 11px; font-weight: 700; color: #94a3b8; letter-spacing: 0.5px; margin-bottom: 8px; text-transform: uppercase; }
+        .setting-input, .setting-select { width: 100%; padding: 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; font-size: 13px; outline: none; }
+        .permission-btn { width: 100%; padding: 12px; border-radius: 10px; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .save-settings-btn { width: 100%; padding: 14px; border-radius: 12px; background: linear-gradient(135deg, #38bdf8, #818cf8); border: none; color: #fff; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 10px; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4); }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Bubble Widget (পপ-আপ উইজেট) -->
+    <div class="floating-bubble" onclick="openSettings()" title="Maya Quick Bubble">M</div>
+
+    <header>
+        <div class="top-left"><i class="fa-solid fa-bars" onclick="openSettings()"></i></div>
+        <div class="top-center">
+            <h1>MAYA</h1>
+            <p>PERSONAL AI</p>
+        </div>
+        <div class="profile-btn" onclick="openSettings()">M</div>
+    </header>
+
+    <div class="main-container">
+        <div class="greeting-section">
+            <div class="greeting-text">
+                <h2>Good morning, Boss😍</h2>
+                <div class="status-badges">
+                    <div class="glass-pill"><i class="fa-solid fa-circle" style="font-size: 6px; color: #38bdf8;"></i> Multitasking <span style="color:#38bdf8">ACTIVE</span></div>
+                </div>
+            </div>
+            <div class="fire-card glass" onclick="executeCommand('youtube')">
+                <i class="fa-solid fa-fire"></i>
+                <div class="num">YT</div>
+                <div class="sub">PLAY</div>
+            </div>
+        </div>
+
+        <div class="orb-wrapper">
+            <div class="orb-ring"></div>
+            <div class="orb-ring-2"></div>
+            <div class="orb-core" onclick="startVoiceAssistant()">M</div>
+            <div class="glass-pill mood-tag">✦ Assistant <span style="color:#38bdf8">Ready</span></div>
+        </div>
+
+        <div class="prompt-box glass">
+            <div class="prompt-header">ALL-IN-ONE COMMAND CONTROL</div>
+            <div class="prompt-text" id="commandStatusText">Tap shortcuts for YouTube, WhatsApp, Calls, Browser & Settings.</div>
+        </div>
+
+        <div class="actions-grid">
+            <div class="action-btn glass" onclick="executeCommand('youtube')"><i class="fa-brands fa-youtube" style="color:#ef4444;"></i> YouTube</div>
+            <div class="action-btn glass" onclick="executeCommand('chrome')"><i class="fa-brands fa-chrome" style="color:#38bdf8;"></i> Search</div>
+            <div class="action-btn glass" onclick="executeCommand('whatsapp')"><i class="fa-brands fa-whatsapp" style="color:#22c55e;"></i> WhatsApp</div>
+            <div class="action-btn glass" onclick="executeCommand('call')"><i class="fa-solid fa-phone" style="color:#10b981;"></i> Call</div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card glass" onclick="executeCommand('sms')">
+                <div class="label">MESSAGING</div>
+                <div class="main-val">SMS</div>
+                <div class="sub-text">Send / Read</div>
+            </div>
+            <div class="info-card glass" onclick="executeCommand('facebook')">
+                <div class="label">SOCIAL</div>
+                <div class="main-val">Meta</div>
+                <div class="sub-text">Facebook</div>
+            </div>
+            <div class="info-card glass" onclick="openSettings()">
+                <div class="label">CONFIG</div>
+                <div class="main-val">API</div>
+                <div class="sub-text">Settings</div>
+            </div>
+        </div>
+
+        <div class="voice-bar glass">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <i class="fa-solid fa-volume-high" style="color: #38bdf8; font-size: 16px;"></i>
+                <div class="voice-info">
+                    <h4>Phone Controller & Multitasking</h4>
+                    <p>YouTube, WhatsApp, Calls & App Automation</p>
+                </div>
+            </div>
+            <div class="mic-small-btn" onclick="startVoiceAssistant()"><i class="fa-solid fa-microphone"></i></div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" onclick="executeCommand('chrome')">
+            <i class="fa-solid fa-globe"></i>
+            <span>Browse</span>
+        </div>
+        <div class="main-mic-container">
+            <div class="main-mic-btn" onclick="startVoiceAssistant()"><i class="fa-solid fa-microphone-lines"></i></div>
+        </div>
+        <div class="nav-item" onclick="executeCommand('whatsapp')">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span>Chat</span>
+        </div>
+        <div class="nav-item" onclick="openSettings()">
+            <i class="fa-solid fa-gear"></i>
+            <span>Settings</span>
+        </div>
+    </div>
+
+    <!-- Dedicated Settings Overlay -->
+    <div class="settings-overlay" id="settingsOverlay">
+        <div class="settings-header">
+            <h2>MAYA CONFIGURATION</h2>
+            <div class="close-settings" onclick="closeSettings()"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+
+        <div class="setting-card glass">
+            <label>Google Gemini API Key</label>
+            <input type="password" id="apiKeyInput" class="setting-input" placeholder="AIzaSy...">
+        </div>
+
+        <div class="setting-card glass">
+            <label>Assistant Language</label>
+            <select id="langSelect" class="setting-select">
+                <option value="bn-IN">Bengali (বাংলা)</option>
+                <option value="en-US">English (US)</option>
+                <option value="hi-IN">Hindi (हिन्दी)</option>
+            </select>
+        </div>
+
+        <div class="setting-card glass">
+            <label>System Permissions & Mic</label>
+            <button class="permission-btn" onclick="requestMicPermission()">
+                <i class="fa-solid fa-microphone-lines"></i> Grant Mic & Voice Permission
+            </button>
+        </div>
+
+        <button class="save-settings-btn" onclick="saveSettings()">Save & Apply Settings</button>
+    </div>
+
+    <script>
+        function openSettings() {
+            document.getElementById('settingsOverlay').style.display = 'flex';
+            document.getElementById('apiKeyInput').value = localStorage.getItem('maya_gemini_key') || '';
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsOverlay').style.display = 'none';
+        }
+
+        function saveSettings() {
+            const apiKey = document.getElementById('apiKeyInput').value;
+            const lang = document.getElementById('langSelect').value;
+            localStorage.setItem('maya_gemini_key', apiKey);
+            localStorage.setItem('maya_lang', lang);
+            alert('Settings and API Key saved successfully!');
+            closeSettings();
+        }
+
+        function requestMicPermission() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(() => alert('Microphone & Voice permissions granted!'))
+                .catch(() => alert('Microphone permission denied.'));
+        }
+
+        function executeCommand(type) {
+            const status = document.getElementById('commandStatusText');
+            if (type === 'youtube') {
+                status.innerText = "Opening YouTube for songs & videos...";
+                window.open('https://www.youtube.com', '_system');
+            } else if (type === 'chrome') {
+                status.innerText = "Opening Google Search / Browser...";
+                window.open('https://www.google.com', '_system');
+            } else if (type === 'whatsapp') {
+                status.innerText = "Opening WhatsApp Messenger for chat & SMS...";
+                window.open('https://wa.me/', '_system');
+            } else if (type === 'call') {
+                status.innerText = "Opening Phone Dialer for calls...";
+                window.open('tel:', '_system');
+            } else if (type === 'sms') {
+                status.innerText = "Opening Messaging app...";
+                window.open('sms:', '_system');
+            } else if (type === 'facebook') {
+                status.innerText = "Opening Facebook...";
+                window.open('https://www.facebook.com', '_system');
+            }
+        }
+
+        function startVoiceAssistant() {
+            const status = document.getElementById('commandStatusText');
+            status.innerText = "Listening to voice command (YouTube, Call, WhatsApp)...";
+            
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                setTimeout(() => {
+                    status.innerText = "Voice active. Opening YouTube/Search...";
+                    window.open('https://www.youtube.com', '_system');
+                }, 1500);
+                return;
+            }
+
+            try {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const recognition = new SpeechRecognition();
+                recognition.lang = localStorage.getItem('maya_lang') || 'bn-IN';
+                recognition.onresult = function(event) {
+                    const speechResult = event.results[0][0].transcript.toLowerCase();
+                    status.innerText = "Command: " + speechResult;
+                    if(speechResult.includes('youtube') || speechResult.includes('গান')) {
+                        window.open('https://www.youtube.com', '_system');
+                    } else if(speechResult.includes('whatsapp') || speechResult.includes('মেসেজ')) {
+                        window.open('https://wa.me/', '_system');
+                    } else if(speechResult.includes('কল') || speechResult.includes('ফোন')) {
+                        window.open('tel:', '_system');
+                    } else {
+                        window.open('https://www.google.com/search?q=' + encodeURIComponent(speechResult), '_system');
+                    }
+                };
+                recognition.start();
+            } catch(e) {
+                status.innerText = "Voice ready. Use quick buttons below.";
+            }
+        }
+    </script>
+</body>
+</html>
