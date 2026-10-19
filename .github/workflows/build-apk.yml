@@ -16,13 +16,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - uses: android-actions/setup-android@v3
-      - name: Install Cordova and build tools
+      - name: Install and build
         run: |
           npm install -g cordova
           npm install
           sdkmanager "platforms;android-33" "build-tools;33.0.2"
-      - name: Build APK
-        run: |
           cordova platform add android
           cordova build android --debug
       - uses: actions/upload-artifact@v4
