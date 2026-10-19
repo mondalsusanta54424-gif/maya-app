@@ -15,12 +15,12 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - uses: android-actions/setup-android@v3
       - name: Install and build
         run: |
           npm install -g cordova
           npm install
-          sdkmanager "platforms;android-33" "build-tools;33.0.2"
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-33" "build-tools;33.0.2"
           cordova platform add android
           cordova build android --debug
       - uses: actions/upload-artifact@v4
